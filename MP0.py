@@ -41,7 +41,7 @@ def process(userID):
     # TODO
     # read in txt
     sublines = [
-        line.strip()
+        line.strip('\n')
         for index, line in enumerate(sys.stdin.readlines())
         if index in indexes
     ]
@@ -54,7 +54,7 @@ def process(userID):
         counts[w] = counts.get(w, 0) + 1
 
   	# sort by desc value then asc key
-    sorted_count = sorted(counts.items(), key=lambda x: (-x[1], x[0]))[0:19]
+    sorted_count = sorted(counts.items(), key=lambda x: (-x[1], x[0]))[0:20]
 
   	# first element to list ret
     ret = [word[0] for word in sorted_count] 
