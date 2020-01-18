@@ -39,10 +39,10 @@ def process(userID):
     def toWords(sentenceList):
     	word_list = []
     	for s in sentenceList:
-    		new_s = s
-    		for i in delimiters: #replace each delimiter in turn with a space
-        		new_s = new_s.replace(i, ' ')
-        	word_list = word_list.append(new_s.split())
+            new_s = s
+            for i in delimiters: #replace each delimiter in turn with a space
+                new_s = new_s.replace(i, ' ')
+            word_list = word_list.append(new_s.split())
         return word_list
 
     word_list = toWords(subLines)
