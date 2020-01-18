@@ -25,43 +25,39 @@ def getIndexes(seed):
         ret.append(random.randint(0, 50000-1))
     return ret
 
+def split_to_words(sentences):
+    word_list = []
+    for sentence in sentences:
+        for i in delimiters:
+            sentence = sentence.replace(i, ' ')
+        for word in sentence.split(' '):
+            if word and word.lower() not in stopWordsList:
+                word_list.append(word.lower())
+    return word_list
+
 def process(userID):
     indexes = getIndexes(userID)
     ret = []
     # TODO
     # read in txt
-    fileLines = [l.strip() for l in sys.stdin.readlines()]
+    sublines = [
+        line.strip()
+        for index, line in enumerate(sys.stdin.readlines())
+        if index in indexes
+    ]
 
-    # select indexed lines
-    subLines = [fileLines[i] for i in indexes]
-
-    # sentence to words by delim into word list
-    def toWords(sentenceList):
-    	word_list = []
-    	for s in sentenceList:
-            new_s = s
-            for i in delimiters: #replace each delimiter in turn with a space
-                new_s = new_s.replace(i, ' ')
-            word_list = word_list.append(new_s.split())
-        return word_list
-
-    word_list = toWords(subLines)
-    # to lower ; rm stopword
-    sub_word_list = [word_list[i].lower().strip(" ") for word_list[i] not in stopWordsList]
+    word_list = split_to_words(sublines)
 
     # dict counter
     counts = dict()
-	for w in sub_word_list:
-  		counts[w] = counts.get(w, 0) + 1
+    for w in word_list:
+        counts[w] = counts.get(w, 0) + 1
 
   	# sort by desc value then asc key
-  	sorted_count = sorted(counts.items(), key=lambda x: (-x[1], x[0]))
-
-  	# top 20 
-  	top20 = sorted_count[0:19]
+    sorted_count = sorted(counts.items(), key=lambda x: (-x[1], x[0]))[0:19]
 
   	# first element to list ret
-  	ret = [word[0] for word in top20] 
+    ret = [word[0] for word in sorted_count] 
 
     for word in ret:
         print(word)
